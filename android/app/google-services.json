@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "181586270662",
+    "project_id": "practicesession-5bab6",
+    "storage_bucket": "practicesession-5bab6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181586270662:android:c6077239aab1654481bac7",
+        "android_client_info": {
+          "package_name": "com.example.sweetolics_cakeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181586270662-020gto068c8gubridqj4lgl7a6vubolm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sweetolics_cakeapp",
+            "certificate_hash": "b11e0126420eadd2825b72e8421c79751c800df2"
+          }
+        },
+        {
+          "client_id": "181586270662-fv8qh5dp52cp5ameuh8torp8u12r7puo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDQvCj4JiOTra40UkmhazOnaE8y2izdSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181586270662-fv8qh5dp52cp5ameuh8torp8u12r7puo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
