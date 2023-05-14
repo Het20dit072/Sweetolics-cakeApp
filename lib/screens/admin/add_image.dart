@@ -32,112 +32,148 @@ var firebaseInstance;
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _PetsImageState extends State<PetsImage> {
-  void imagePickerOption() {
-    Get.bottomSheet(
-      SingleChildScrollView(
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0),
-          ),
-          child: Container(
-            color: Colors.white,
-            height: 210,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    "Pic Image From",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        imgFromCamera();
-                      },
-                      icon: const Icon(Icons.camera),
-                      label: const Text("CAMERA"),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        imgFromGallery(ImageSource.gallery);
-                      },
-                      icon: const Icon(Icons.image),
-                      label: const Text("GALLERY"),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: const Icon(Icons.close),
-                      label: const Text("CANCEL"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
   File? _photo;
 
   final ImagePicker _picker = ImagePicker();
+  imagePickerOptions(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+              child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+            ),
+            child: Container(
+              color: Colors.white,
+              height: 210,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      "Pic Image From",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          print('yes it runs');
+                          final pickedFile = await _picker.pickImage(
+                              source: ImageSource.camera);
 
-  Future imgFromGallery(ImageSource gallery) async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+                          setState(() {
+                            if (pickedFile != null) {
+                              _photo = File(pickedFile.path);
+                              if (_photo == null) return;
+                              final fileName = basename(_photo!.path);
+                              final destination = 'Add_cake/$fileName';
+                              try {
+                                final ref = firebase_storage
+                                    .FirebaseStorage.instance
+                                    .ref(destination)
+                                    .child('Add_cake/');
 
-    setState(() {
-      if (pickedFile != null) {
-        _photo = File(pickedFile.path);
-        uploadFile();
-      } else {
-        print('No image selected.');
-      }
-    });
+                                ref.putFile(_photo!);
+                              } catch (e) {
+                                print('error occured');
+                              }
+                            } else {
+                              print('No image selected.');
+                            }
+                          });
+                        },
+                        icon: const Icon(Icons.camera),
+                        label: const Text("CAMERA"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          print('yes it runs');
+                          final pickedFile = await _picker.pickImage(
+                              source: ImageSource.gallery);
+
+                          setState(() {
+                            if (pickedFile != null) {
+                              _photo = File(pickedFile.path);
+                              if (_photo == null) return;
+                              final fileName = basename(_photo!.path);
+                              final destination = 'Add_cake/$fileName';
+                              try {
+                                final ref = firebase_storage
+                                    .FirebaseStorage.instance
+                                    .ref(destination)
+                                    .child('Add_cake/');
+
+                                ref.putFile(_photo!);
+                              } catch (e) {
+                                print('error occured');
+                              }
+                            } else {
+                              print('No image selected.');
+                            }
+                          });
+                        },
+                        icon: const Icon(Icons.image),
+                        label: const Text("GALLERY"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: const Icon(Icons.close),
+                        label: const Text("CANCEL"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+        });
   }
+
+  Future imgFromGallery(ImageSource gallery) async {}
 
   Future imgFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
@@ -152,19 +188,7 @@ class _PetsImageState extends State<PetsImage> {
     });
   }
 
-  Future uploadFile() async {
-    if (_photo == null) return;
-    final fileName = basename(_photo!.path);
-    final destination = 'Add_Pets/$fileName';
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .child('Add_Pets/');
-      await ref.putFile(_photo!);
-    } catch (e) {
-      print('error occured');
-    }
-  }
+  Future uploadFile() async {}
 //for image 2
 
   File? _photo2;
@@ -200,144 +224,12 @@ class _PetsImageState extends State<PetsImage> {
   Future uploadFile2() async {
     if (_photo2 == null) return;
     final fileName = basename(_photo2!.path);
-    final destination = 'Add_Pets/$fileName';
+    final destination = 'Add_cake/$fileName';
     try {
       final ref = firebase_storage.FirebaseStorage.instance
           .ref(destination)
-          .child('Add_Pets/');
+          .child('Add_cake/');
       await ref.putFile(_photo2!);
-    } catch (e) {
-      print('error occured');
-    }
-  }
-
-  //for image 3
-  void imagePickerOption3() {
-    Get.bottomSheet(
-      SingleChildScrollView(
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0),
-          ),
-          child: Container(
-            color: Colors.white,
-            height: 210,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    "Pic Image From",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        imgFromCamera3();
-                      },
-                      icon: const Icon(Icons.camera),
-                      label: const Text("CAMERA"),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        imgFromGallery3(ImageSource.gallery);
-                      },
-                      icon: const Icon(Icons.image),
-                      label: const Text("GALLERY"),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton.icon(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: const Icon(Icons.close),
-                      label: const Text("CANCEL"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  File? _photo3;
-
-  final ImagePicker _picker3 = ImagePicker();
-
-  Future imgFromGallery3(ImageSource gallery) async {
-    final pickedFile = await _picker3.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _photo3 = File(pickedFile.path);
-        uploadFile3();
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
-
-  Future imgFromCamera3() async {
-    final pickedFile = await _picker3.pickImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        _photo3 = File(pickedFile.path);
-        uploadFile3();
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
-
-  Future uploadFile3() async {
-    if (_photo3 == null) return;
-    final fileName = basename(_photo3!.path);
-    final destination = 'Add_Pets/$fileName';
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .child('Add_Pets/');
-      await ref.putFile(_photo3!);
     } catch (e) {
       print('error occured');
     }
@@ -397,7 +289,7 @@ class _PetsImageState extends State<PetsImage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 220, top: 25),
                         child: Text(
-                          "Pet Image :",
+                          "Cake Image 1 :",
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
@@ -432,7 +324,9 @@ class _PetsImageState extends State<PetsImage> {
                                       ),
                               )),
                           InkWell(
-                            onTap: imagePickerOption,
+                            onTap: () {
+                              imagePickerOptions(context);
+                            },
                             child: Padding(
                               padding: EdgeInsets.only(left: 5),
                               child: Container(
@@ -452,7 +346,7 @@ class _PetsImageState extends State<PetsImage> {
                                         color: Color(0xff646cd9), width: 2)),
                                 child: Center(
                                     child: Text(
-                                  'cake image 1',
+                                  'pick cake image ',
                                   style: TextStyle(
                                       fontSize: 17,
                                       color: Colors.deepPurple,
@@ -466,7 +360,7 @@ class _PetsImageState extends State<PetsImage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 210, top: 25),
                         child: Text(
-                          "cake Image :",
+                          "cake Image 2 :",
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
@@ -502,109 +396,119 @@ class _PetsImageState extends State<PetsImage> {
                               )),
                           InkWell(
                             onTap: () {
-                              Get.bottomSheet(
-                                SingleChildScrollView(
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(20.0),
-                                      topRight: Radius.circular(20.0),
-                                    ),
-                                    child: Container(
-                                      color: Colors.white,
-                                      height: 210,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: [
-                                            const Text(
-                                              "Pic Image From",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 0, 10, 0),
-                                              child: ElevatedButton.icon(
-                                                style: ButtonStyle(
-                                                  shape:
-                                                      MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SingleChildScrollView(
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(20.0),
+                                          topRight: Radius.circular(20.0),
+                                        ),
+                                        child: Container(
+                                          color: Colors.white,
+                                          height: 210,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                const Text(
+                                                  "Pic Image From",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 0, 10, 0),
+                                                  child: ElevatedButton.icon(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      18.0),
+                                                        ),
+                                                      ),
                                                     ),
+                                                    onPressed: () {
+                                                      imgFromCamera2();
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.camera),
+                                                    label: const Text("CAMERA"),
                                                   ),
                                                 ),
-                                                onPressed: () {
-                                                  imgFromCamera2();
-                                                },
-                                                icon: const Icon(Icons.camera),
-                                                label: const Text("CAMERA"),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 0, 10, 0),
-                                              child: ElevatedButton.icon(
-                                                style: ButtonStyle(
-                                                  shape:
-                                                      MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 0, 10, 0),
+                                                  child: ElevatedButton.icon(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      18.0),
+                                                        ),
+                                                      ),
                                                     ),
+                                                    onPressed: () {
+                                                      imgFromGallery2(
+                                                          ImageSource.gallery);
+                                                    },
+                                                    icon:
+                                                        const Icon(Icons.image),
+                                                    label:
+                                                        const Text("GALLERY"),
                                                   ),
                                                 ),
-                                                onPressed: () {
-                                                  imgFromGallery2(
-                                                      ImageSource.gallery);
-                                                },
-                                                icon: const Icon(Icons.image),
-                                                label: const Text("GALLERY"),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 0, 10, 0),
-                                              child: ElevatedButton.icon(
-                                                style: ButtonStyle(
-                                                  shape:
-                                                      MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 0, 10, 0),
+                                                  child: ElevatedButton.icon(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      18.0),
+                                                        ),
+                                                      ),
                                                     ),
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    icon:
+                                                        const Icon(Icons.close),
+                                                    label: const Text("CANCEL"),
                                                   ),
                                                 ),
-                                                onPressed: () {
-                                                  Get.back();
-                                                },
-                                                icon: const Icon(Icons.close),
-                                                label: const Text("CANCEL"),
-                                              ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              );
+                                    );
+                                  });
                             },
                             child: Padding(
                               padding: EdgeInsets.only(left: 5),
@@ -651,19 +555,23 @@ class _PetsImageState extends State<PetsImage> {
             backgroundColor: Color.fromARGB(255, 114, 180, 255),
             onPressed: () async {
               User? user = await FirebaseAuth.instance.currentUser;
-              url = _photo!.path;
-              di = url;
-              url2 = _photo2!.path;
-              di2 = url2;
+              Reference ref = storage
+                  .ref()
+                  .child('cakes')
+                  .child(user!.uid)
+                  .child('cake1.jpg');
+              UploadTask uploadTask = ref.putFile(_photo!);
+              TaskSnapshot taskSnapshot =
+                  await uploadTask.whenComplete(() => null);
+              String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-              await FirebaseFirestore.instance
+              FirebaseFirestore.instance
                   .collection("cakesdetails")
-                  .doc(user?.uid)
+                  .doc(user.uid) //add ! this
                   .update({
-                'cake Image1': url,
-                'cake Image2': di2,
+                'cake Image1': downloadUrl,
               });
-              await Future.delayed(Duration(seconds: 2));
+
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => MyHomePage()));
             },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sweetolics_cakeapp/screens/homescreen/customizeCake.dart';
 import 'package:sweetolics_cakeapp/screens/initial_page.dart';
 import 'package:sweetolics_cakeapp/screens/widgets/cake_menu.dart';
 
@@ -53,7 +54,7 @@ Future bottomsheetcake(BuildContext context) {
                     child: Text(
                       "What you want to see on Cake ?",
                       style: TextStyle(
-                          color: Color(0xffc02444),
+                          color: Colors.purple,
                           fontWeight: FontWeight.w500,
                           fontSize: 16),
                     ),
@@ -68,10 +69,10 @@ Future bottomsheetcake(BuildContext context) {
                         enabled: true,
                         enabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(width: 2, color: Color(0xffc02444))),
+                                BorderSide(width: 2, color: Colors.purple)),
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(width: 2, color: Color(0xffc02444))),
+                                BorderSide(width: 2, color: Colors.purple)),
                         labelText: 'Name On Cake',
                       ),
                     ),
@@ -86,10 +87,15 @@ Future bottomsheetcake(BuildContext context) {
                     child: ElevatedButton(
                       onPressed: () {
                         debugPrint('ElevatedButton Clicked');
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    CustomCake()));
                       },
                       child: Text('Next'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xffc02444),
+                        backgroundColor: Colors.purple,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),

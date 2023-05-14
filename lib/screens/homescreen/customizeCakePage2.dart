@@ -105,7 +105,7 @@ class _CustomCake2State extends State<CustomCake2> {
                     ),
                   ),
                   CircleAvatar(
-                    backgroundColor: Colors.cyan,
+                    backgroundColor: Color(0xffae759f),
                     child: Text(
                       "2",
                       style: TextStyle(
@@ -327,7 +327,7 @@ class _CustomCake2State extends State<CustomCake2> {
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          primary: Color(0xff251749)),
+                          primary: Color(0xff55286f)),
                       onPressed: () {
                         Navigator.push(
                           context,

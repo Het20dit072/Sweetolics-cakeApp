@@ -50,7 +50,7 @@ class menuItemtab_quantityState extends State<menuItemtab_quantity> {
                         child: Text(
                           widget.CardName,
                           style: TextStyle(
-                              color: Color(0xffc02444),
+                              color: Colors.purple,
                               fontWeight: FontWeight.w500,
                               fontSize: 16),
                         ),
@@ -59,14 +59,14 @@ class menuItemtab_quantityState extends State<menuItemtab_quantity> {
                     IconButton(
                         icon: new Icon(
                           CupertinoIcons.minus_circle_fill,
-                          color: Color(0xffc02444),
+                          color: Colors.purple,
                         ),
                         onPressed: decrement),
                     Text("${_count}"),
                     IconButton(
                         icon: new Icon(
                           CupertinoIcons.add_circled_solid,
-                          color: Color(0xffc02444),
+                          color: Colors.purple,
                         ),
                         onPressed: increment)
                   ],

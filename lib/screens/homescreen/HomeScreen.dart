@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
@@ -15,6 +17,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Future<QuerySnapshot> cakePrice;
+  @override
+  void initState() {
+    super.initState();
+
+    // Fetch the cake price from Firebase Firestore
+    FirebaseFirestore.instance
+        .collection("cakesdetails")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        cakePrice = FirebaseFirestore.instance.collection("cakesdetails").get();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,6 +1,8 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sweetolics_cakeapp/screens/MyOrder_page.dart';
+import 'package:sweetolics_cakeapp/screens/homescreen/OfferPAGE.dart';
 import 'package:sweetolics_cakeapp/screens/homescreen/customizeCake.dart';
 
 class navigationBar extends StatefulWidget {
@@ -25,7 +27,14 @@ class _navigationBarState extends State<navigationBar> {
           title: Text("Explore"),
         ),
         CustomNavigationBarItem(
-          icon: Icon(Icons.explore),
+          icon: InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => OfferPage()));
+              },
+              child: Icon(Icons.explore)),
           title: Text("Offers"),
         ),
         CustomNavigationBarItem(
@@ -38,19 +47,22 @@ class _navigationBarState extends State<navigationBar> {
             },
             child: Icon(
               CupertinoIcons.add_circled_solid,
-              color: Color.fromARGB(255, 243, 213, 199),
+              color: Color(0xffc02444),
               size: 30,
             ),
           ),
           title: Text("Add"),
         ),
         CustomNavigationBarItem(
-          icon: Icon(Icons.request_quote_sharp),
-          title: Text("Requests"),
-        ),
-        CustomNavigationBarItem(
-          icon: Icon(Icons.account_circle),
-          title: Text("Profile"),
+          icon: InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => MyOrderPage()));
+              },
+              child: Icon(Icons.request_quote_sharp)),
+          title: Text("Orders"),
         ),
       ],
       currentIndex: _currentIndex,

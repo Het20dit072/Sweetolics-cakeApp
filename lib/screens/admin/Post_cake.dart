@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:sweetolics_cakeapp/screens/homescreen/HomeScreen.dart';
+import 'package:sweetolics_cakeapp/screens/homescreen/customizeCake.dart';
 
 import 'add_image.dart';
 
@@ -24,8 +25,8 @@ class _PostCakeDetailsState extends State<PostCakeDetails> {
   final _descriptionController = TextEditingController();
 
   // Reference to the Firestore collection
-  final CollectionReference cakeCollection =
-      FirebaseFirestore.instance.collection('cakesdetails');
+  final DocumentReference<Map<String, dynamic>> cakeCollection =
+      FirebaseFirestore.instance.collection('cakesdetails').doc(user!.uid);
 
   // Handle the image picker
 
@@ -33,7 +34,7 @@ class _PostCakeDetailsState extends State<PostCakeDetails> {
   Widget build(BuildContext context) {
     void _submitForm() async {
       // Add the form data to the Firestore collection
-      cakeCollection.add({
+      cakeCollection.set({
         'Cake Name': _nameController.text,
         'price': int.parse(_priceController.text),
         'Cake Type': _CakeTypeController.text,
@@ -46,66 +47,69 @@ class _PostCakeDetailsState extends State<PostCakeDetails> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.cyan,
         centerTitle: true,
         title: Text('Cake Details'),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            // Name field
-            RoundedTextField(
-              controller: _nameController,
-              hintText: 'Cake Name',
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            // Price field
-            RoundedTextField(
-              controller: _priceController,
-              hintText: 'Price',
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            // Image field
-            RoundedTextField(
-              controller: _CakeTypeController,
-              hintText: 'Cake Type',
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            // Description field
-            RoundedTextField(
-              controller: _descriptionController,
-              hintText: 'Flavour',
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RoundedTextField(
-              controller: _descriptionController,
-              hintText: 'Description',
-            ),
-            // Submit button
-            Container(
-              height: 55,
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),
-                child: Text('Submit'),
-                onPressed: _submitForm,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 20,
               ),
-            ),
-          ],
+              // Name field
+              RoundedTextField(
+                controller: _nameController,
+                hintText: 'Cake Name',
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              // Price field
+              RoundedTextField(
+                controller: _priceController,
+                hintText: 'Price',
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              // Image field
+              RoundedTextField(
+                controller: _CakeTypeController,
+                hintText: 'Cake Type',
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              // Description field
+              RoundedTextField(
+                controller: _FlavourController,
+                hintText: 'Flavour',
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              RoundedTextField(
+                controller: _descriptionController,
+                hintText: 'Description',
+              ),
+              // Submit button
+              Container(
+                height: 55,
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),
+                  child: Text('Submit'),
+                  onPressed: _submitForm,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
